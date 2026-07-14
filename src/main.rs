@@ -10,11 +10,11 @@ struct Resp {
 
 fn main() -> anyhow::Result<()> {
     let base_url = "https://api.frankfurter.dev/v2/rates";
-
     let url = format!("{}?base={}&quotes={}", base_url, "USD", "KZT");
-    let resp: Vec<Resp> = reqwest::blocking::get(url)?.json()?;
+    let mut resp: Vec<Resp> = reqwest::blocking::get(url)?.json()?;
+    let resp = resp.remove(0);
 
-    println!("response: {resp:#?}");
+    println!("[{}] {}/{} is {}", resp.date, resp.base, resp.quote, resp.rate);
 
     Ok(())
 }
