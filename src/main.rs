@@ -19,6 +19,14 @@ struct Cli {
     to: String,
 }
 
+mod ansi {
+    pub const RESET: &str = "\x1b[0m";
+
+    pub const GRAY: &str = "\x1b[38;2;168;153;132m";
+    pub const GREEN: &str = "\x1b[38;2;184;187;38m";
+    pub const YELLOW: &str = "\x1b[38;2;250;189;47m";
+}
+
 fn main() -> anyhow::Result<()> {
     let args = Cli::parse();
     let from = args.from.to_uppercase();
@@ -33,8 +41,15 @@ fn main() -> anyhow::Result<()> {
         .map_err(|_| anyhow::anyhow!("expected exactly one rate"))?;
 
     println!(
-        "[{}] {}/{} is {}",
-        resp.date, resp.base, resp.quote, resp.rate
+        "{gray}[{date}]{reset} {yellow}{base}/{quote}{reset} {gray}→{reset} {green}{rate:.2}{reset}",
+        gray = ansi::GRAY,
+        yellow = ansi::YELLOW,
+        green = ansi::GREEN,
+        reset = ansi::RESET,
+        date = resp.date,
+        base = resp.base,
+        quote = resp.quote,
+        rate = resp.rate,
     );
 
     Ok(())
