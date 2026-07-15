@@ -1,5 +1,5 @@
-use serde::Deserialize;
 use clap::Parser;
+use serde::Deserialize;
 
 #[derive(Deserialize, Debug)]
 struct Resp {
@@ -32,7 +32,10 @@ fn main() -> anyhow::Result<()> {
         .try_into()
         .map_err(|_| anyhow::anyhow!("expected exactly one rate"))?;
 
-    println!("[{}] {}/{} is {}", resp.date, resp.base, resp.quote, resp.rate);
+    println!(
+        "[{}] {}/{} is {}",
+        resp.date, resp.base, resp.quote, resp.rate
+    );
 
     Ok(())
 }
