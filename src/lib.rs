@@ -23,10 +23,10 @@ pub struct Cli {
 
 #[derive(Args)]
 pub struct Currencies {
-    #[arg(short, long, default_value = "USD")]
+    #[arg(short, long, global = true, default_value = "USD")]
     pub from: String,
 
-    #[arg(short, long, default_value = "KZT")]
+    #[arg(short, long, global = true, default_value = "KZT")]
     pub to: String,
 }
 
