@@ -7,5 +7,5 @@ if you care about certain currencies' exchange rates, use `xcheck`
 cargo b --release
 ./target/release/xcheck --from GBP -t JPY
 
-sudo cp ./target/debug/xcheck /usr/local/bin
+sudo cp ./target/release/xcheck /usr/local/bin
 ```
