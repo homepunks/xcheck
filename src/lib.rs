@@ -1,7 +1,8 @@
 use chrono::{Duration, Local};
 use clap::{Args, Parser, Subcommand};
 use serde::Deserialize;
-use textplots::{Chart, Plot, Shape};
+use textplots::{Chart, ColorPlot, Shape};
+use rgb::RGB8;
 
 #[derive(Deserialize, Debug)]
 struct Resp {
@@ -69,7 +70,7 @@ pub fn graph(days: u32, from: &str, to: &str) -> anyhow::Result<()> {
 
     let xmax = points.len().saturating_sub(1) as f32;
     Chart::new(180, 60, 0.0, xmax)
-        .lineplot(&Shape::Lines(&points))
+        .linecolorplot(&Shape::Lines(&points), RGB8::new(184, 187, 38))
         .nice();
 
     Ok(())
