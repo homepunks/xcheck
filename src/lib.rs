@@ -45,6 +45,9 @@ mod ansi {
     pub const AQUA: &str = "\x1b[38;2;142;192;124m";
 }
 
+const RGB_GREEN: RGB8 = RGB8 { r: 184, g: 187, b: 38 };
+const RGB_RED:   RGB8 = RGB8 { r: 251, g: 73,  b: 52 };
+
 const BASE_URL: &str = "https://api.frankfurter.dev/v2/rates";
 
 pub fn graph(days: u32, from: &str, to: &str) -> anyhow::Result<()> {
@@ -69,9 +72,20 @@ pub fn graph(days: u32, from: &str, to: &str) -> anyhow::Result<()> {
         .collect();
 
     let xmax = points.len().saturating_sub(1) as f32;
-    Chart::new(180, 60, 0.0, xmax)
-        .linecolorplot(&Shape::Lines(&points), RGB8::new(184, 187, 38))
-        .nice();
+
+    let segments: Vec<(Shape, RGB8)> = points
+        .windows(2)
+        .map(|w| {
+            let color = if w[1].1 >= w[0].1 { RGB_GREEN } else { RGB_RED };
+            (Shape::Lines(w), color)
+        })
+        .collect();
+
+    let mut chart = &mut Chart::new(180, 60, 0.0, xmax);
+    for (shape, color) in &segments {
+        chart = chart.linecolorplot(shape, *color);
+    }
+    chart.nice();
 
     Ok(())
 }
